@@ -115,6 +115,9 @@ Enforcer::enforce("user1", "/user", "edit")
 ```
 更多使用方法详见官方API
 
+## Watcher
+开启观察者在```config/autoload/processes.php``` 加入 ```Donjan\Casbin\Process\WatcherProcess::class```
+
 ## 官方资源
 
 * [官方文档](https://casbin.org/docs/zh-CN/overview)

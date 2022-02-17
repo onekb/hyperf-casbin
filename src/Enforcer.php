@@ -3,6 +3,8 @@
 namespace Donjan\Casbin;
 
 use Casbin\Enforcer as BaseEnforcer;
+use Casbin\Persist\Watcher;
+use Donjan\Casbin\Watcher\RedisWatcher;
 use Psr\Container\ContainerInterface;
 use Hyperf\Utils\ApplicationContext;
 
@@ -31,6 +33,8 @@ use Hyperf\Utils\ApplicationContext;
  * @method static array getPermissionsForUserInDomain(string $name, string $domain)
  * @method static bool addRoleForUserInDomain(string $user, string $role, string $domain)
  * @method static bool deleteRoleForUserInDomain(string $user, string $role, string $domain)
+ * @method static void setWatcher(Watcher $watcher)
+ * @method static void loadPolicy()
  */
 class Enforcer
 {
@@ -57,13 +61,28 @@ class Enforcer
     /**
      *
      * @param string $method
-     * @param array  $parameters
+     * @param array $parameters
      *
      * @return mixed
      */
     public static function __callStatic($method, $parameters)
     {
-        return ApplicationContext::getContainer()->get(BaseEnforcer::class)->{$method}(...$parameters);
+        return ApplicationContext::getContainer()->get(BaseEnforcer::class)->{$method}(
+            ...
+            $parameters
+        );
+    }
+
+    public static function start()
+    {
+        /** @var RedisWatcher $watcher */
+        $watcher = make(RedisWatcher::class);
+        static::setWatcher($watcher);
+        $watcher->setUpdateCallback(function () {
+            static::loadPolicy();
+
+        });
+        $watcher->subscribe();
     }
 
 }

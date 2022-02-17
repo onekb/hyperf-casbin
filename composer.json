@@ -20,7 +20,7 @@
     ],
     "license": "Apache-2.0",
     "require": {
-        "php": ">=7.3",
+         "php": ">=7.4",
         "ext-swoole": ">=4.5",
         "hyperf/database": "~2.2",
         "hyperf/db-connection": "~2.2",
@@ -30,7 +30,9 @@
         "hyperf/logger": "~2.2",
         "casbin/casbin": "~3.20",
         "hyperf/command": "~2.2",
-        "casbin/psr3-bridge": "~1.3"
+        "casbin/psr3-bridge": "~1.3",
+        "hyperf/redis": "~2.2",
+        "hyperf/process": "^2.2"
     },
     "require-dev": {
         "hyperf/testing": "~2.2",
